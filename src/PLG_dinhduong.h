@@ -49,7 +49,7 @@ int a = 0;
 tmElements_t tm;
 int value[6] = {0, 0, 0, 0, 0, 0};
 unsigned long lastTime = 0;
-
+bool run = false;
 bool last_down = 0;
 bool last_up = 0;
 bool PLG_setup = false;
@@ -538,19 +538,21 @@ void loop()
     {
         // Nhả nút
         buttonPressed = false;
+        run =! run;
     }
 
     // Nếu nút vẫn đang nhấn và đã giữ đủ 5s
-    if (buttonPressed && (millis() - pressStartTime >= 3000))
+    if (buttonPressed && (millis() - pressStartTime >= 5000))
     {
         PLG_setup = true;
-        tft.fillScreen(TFT_BLACK);        
+        tft.fillScreen(TFT_BLACK);
         // Reset thời gian bắt đầu để tiếp tục đếm nếu giữ tiếp
         pressStartTime = millis();
     }
     if (PLG_setup == true)
     {
-        while (read_set == 1); 
+        while (read_set == 1)
+            ;
         if (PLG_caibom == false)
         {
             PLG_delete();
@@ -565,8 +567,9 @@ void loop()
         }
         if (read_set == 1)
         {
-            while (read_set == 1);           
-            
+            while (read_set == 1)
+                ;
+
             if (mouse == 1 && PLG_setup == true && PLG_caibom == false)
             {
                 PLG_caibom = true;
@@ -581,53 +584,54 @@ void loop()
             {
                 PLG_setup = false;
                 clear = true;
+                run =! run;
             }
             else if (mouse_cai == 1 && PLG_caibom == true)
             {
                 clear = true;
-                if(STATUS_M1.startsWith("ENABLE"))
+                if (STATUS_M1.startsWith("ENABLE"))
                 {
-                    STATUS_M1="DISABLE";
+                    STATUS_M1 = "DISABLE";
                 }
                 else
                 {
-                    STATUS_M1="ENABLE";
+                    STATUS_M1 = "ENABLE";
                 }
             }
             else if (mouse_cai == 2 && PLG_caibom == true)
             {
                 clear = true;
-                if(STATUS_M2.startsWith("ENABLE"))
+                if (STATUS_M2.startsWith("ENABLE"))
                 {
-                    STATUS_M2="DISABLE";
+                    STATUS_M2 = "DISABLE";
                 }
                 else
                 {
-                    STATUS_M2="ENABLE";
+                    STATUS_M2 = "ENABLE";
                 }
             }
             else if (mouse_cai == 3 && PLG_caibom == true)
             {
                 clear = true;
-                if(STATUS_M3.startsWith("ENABLE"))
+                if (STATUS_M3.startsWith("ENABLE"))
                 {
-                    STATUS_M3="DISABLE";
+                    STATUS_M3 = "DISABLE";
                 }
                 else
                 {
-                    STATUS_M3="ENABLE";
+                    STATUS_M3 = "ENABLE";
                 }
             }
             else if (mouse_cai == 4 && PLG_caibom == true)
             {
                 clear = true;
-                if(STATUS_M4.startsWith("ENABLE"))
+                if (STATUS_M4.startsWith("ENABLE"))
                 {
-                    STATUS_M4="DISABLE";
+                    STATUS_M4 = "DISABLE";
                 }
                 else
                 {
-                    STATUS_M4="ENABLE";
+                    STATUS_M4 = "ENABLE";
                 }
             }
             else if (mouse_cai == 5 && PLG_caibom == true)
@@ -641,6 +645,76 @@ void loop()
     {
         PLG_delete();
         DRAW_FORM();
-        
+        if (run == 1)
+        {
+            if (STATUS_M1.startsWith("ENABLE"))
+            {
+                RUN_M1();
+            }
+             if (STATUS_M2.startsWith("ENABLE"))
+            {
+                RUN_M2();
+            }
+             if (STATUS_M3.startsWith("ENABLE"))
+            {
+                RUN_M3();
+            }
+             if (STATUS_M4.startsWith("ENABLE"))
+            {
+                RUN_M4();
+            }
+            if (STATUS_M1.startsWith("DISABLE"))
+            {
+                STOP_M1();
+            }
+             if (STATUS_M2.startsWith("DISABLE"))
+            {
+                STOP_M2();
+            }
+             if (STATUS_M3.startsWith("DISABLE"))
+            {
+                STOP_M3();
+            }
+             if (STATUS_M4.startsWith("DISABLE"))
+            {
+                STOP_M4();
+            }
+
+        }
+        else
+        {
+            if (STATUS_M1.startsWith("ENABLE"))
+            {
+                STOP_M1();
+            }
+             if (STATUS_M2.startsWith("ENABLE"))
+            {
+                STOP_M2();
+            }
+             if (STATUS_M3.startsWith("ENABLE"))
+            {
+                STOP_M3();
+            }
+             if (STATUS_M4.startsWith("ENABLE"))
+            {
+                STOP_M4();
+            }
+            if (STATUS_M1.startsWith("DISABLE"))
+            {
+                STOP_M1();
+            }
+             if (STATUS_M2.startsWith("DISABLE"))
+            {
+                STOP_M2();
+            }
+             if (STATUS_M3.startsWith("DISABLE"))
+            {
+                STOP_M3();
+            }
+             if (STATUS_M4.startsWith("DISABLE"))
+            {
+                STOP_M4();
+            }
+        }
     }
 }
